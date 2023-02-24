@@ -51,6 +51,7 @@ class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(registry -> registry
                 .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
+                .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                 .anyRequest().authenticated());
         http.csrf().disable();
         return http.build();
