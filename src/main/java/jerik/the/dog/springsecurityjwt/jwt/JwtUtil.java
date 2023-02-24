@@ -3,9 +3,11 @@ package jerik.the.dog.springsecurityjwt.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
 import java.util.Date;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -16,7 +18,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "secret";
+    private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     // https://siddharthac6.medium.com/json-web-token-jwt-the-right-way-of-implementing-with-node-js-65b8915d550e
 
@@ -36,7 +38,6 @@ public class JwtUtil {
     // it seems that this guy extracts all claims - even some set of "built in" claims
     // e.g. username (subject) and expiration
     private Claims extractAllClaims(String token) {
-        // TODO: another deprecated method
         return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build()
                 .parseClaimsJwt(token)
                 .getBody();
@@ -64,7 +65,7 @@ public class JwtUtil {
                 .setSubject(subject) // subject = person who has/tries to authenticate
                 .setIssuedAt(Date.from(creationTime.toInstant(ZoneOffset.UTC)))
                 .setExpiration(Date.from(creationTime.plusHours(1).toInstant(ZoneOffset.UTC)))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY) // actual signing of the jwt // TODO: deprecated, provide an actual Key
+                .signWith(SECRET_KEY) // actual signing of the jwt
                 .compact(); // build and serialize to compact representation
     }
 

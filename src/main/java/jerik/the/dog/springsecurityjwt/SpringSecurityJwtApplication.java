@@ -1,6 +1,5 @@
 package jerik.the.dog.springsecurityjwt;
 
-import org.apache.naming.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,15 +26,10 @@ public class SpringSecurityJwtApplication {
 	@Bean
 	public CommandLineRunner runner() {
 		return args -> {
-			Arrays.stream(applicationContext.getBeanDefinitionNames()).forEach(System.out::println);
-
-
-
-
-
+			Arrays.stream(applicationContext.getBeanDefinitionNames())
+					.filter(name -> !name.toLowerCase().contains("spring"))
+					.forEach(System.out::println);
 		};
-
 	}
-
 
 }

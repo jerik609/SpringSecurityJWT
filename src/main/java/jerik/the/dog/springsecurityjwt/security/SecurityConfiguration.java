@@ -51,68 +51,9 @@ class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(registry -> registry
                 .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
-                .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                 .anyRequest().authenticated());
         http.csrf().disable();
         return http.build();
     }
-
-
-
-
-                            //authorizationManagerRequestMatcherRegistry.
-
-//
-//
-//
-//
-//
-//
-//                )
-//                // disabling csrf since we won't use form login
-//                .csrf().disable()
-//                // giving permission to every request for /login endpoint
-//                .authorizeRequests()//.antMatchers("/login").permitAll()
-//                // for everything else, the user has to be authenticated
-//                .anyRequest().authenticated()
-//                // setting stateless session, because we choose to implement Rest API
-//                .and().sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//
-//        // adding the custom filter before UsernamePasswordAuthenticationFilter in the filter chain
-//        //http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-//        return http.build();
-//    }
-
-
-
-//    @Autowired
-//    private JwtTokenFilter jwtTokenFilter;
-
-    // Injecting JWT custom authentication provider
-//    @Autowired
-//    JwtAuthenticationProvider customAuthenticationProvider;
-
-    // Injecting Google custom authentication provider
-//    @Autowired
-//    GoogleCloudAuthenticationProvider googleCloudAuthenticationProvider;
-
-
-
-    // adding our custom authentication providers
-    // authentication manager will call these custom provider's
-    // authenticate methods from now on.
-//    @Autowired
-//    void registerProvider(AuthenticationManagerBuilder auth) {
-//        System.out.println("why is this even called?");
-////        auth.authenticationProvider(customAuthenticationProvider)
-////                .authenticationProvider(googleCloudAuthenticationProvider);
-//    }
-
-//    @Autowired
-//    void booohooohoooo() {
-//        System.out.println("REALLY?");
-//    }
-
 
 }
