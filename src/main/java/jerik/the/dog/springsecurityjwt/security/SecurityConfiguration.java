@@ -3,6 +3,7 @@ package jerik.the.dog.springsecurityjwt.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -17,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 // the default security settings: org/springframework/boot/autoconfigure/security/servlet/SpringBootWebSecurityConfiguration.java
 
 @Configuration
-//@EnableWebSecurity
+//@EnableWebSecurity // enabled in spring boot automatically
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 class SecurityConfiguration {
 
@@ -34,17 +35,39 @@ class SecurityConfiguration {
         auth.userDetailsService(myUserDetailsService);
     }
 
+    @Bean
+    AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
     // password encoder - not encoded for our test
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
 
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(registry -> registry
+                .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
+                .anyRequest().authenticated());
+        http.csrf().disable();
+        return http.build();
+    }
 
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
+
+
+                            //authorizationManagerRequestMatcherRegistry.
+
+//
+//
+//
+//
+//
+//
+//                )
 //                // disabling csrf since we won't use form login
 //                .csrf().disable()
 //                // giving permission to every request for /login endpoint
@@ -73,11 +96,7 @@ class SecurityConfiguration {
 //    @Autowired
 //    GoogleCloudAuthenticationProvider googleCloudAuthenticationProvider;
 
-//    @Bean
-//    AuthenticationManager authenticationManager(
-//            AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
+
 
     // adding our custom authentication providers
     // authentication manager will call these custom provider's
