@@ -11,10 +11,16 @@ A /authenticate API endpoint
 
 Client logs in and gets a JWT. He keeps the JWT and will include it in the header of subsequent requests to our application.
 
+So in our new request, we will provide the token in header "Authorization" with "Bearer <jwt_value>".
+
+We need to tell spring security to check every request, if it contains a valid jwt in the Authoriation header, if there's a Bearer and blah.
+Then it must take out the blah, treat it as jwt, extract the username out of it. Verify if its a valid jwt, if that's the case, the person is trustworthy,
+and we can put the username in the security context.
+
 ## Step 2
-...
-
-
+Intercept all incoming requests.
+- extract JWT from the header
+- Validate and set in execution (security?) context
 
 # Links
 - https://curity.io/resources/learn/jwt-best-practices/
