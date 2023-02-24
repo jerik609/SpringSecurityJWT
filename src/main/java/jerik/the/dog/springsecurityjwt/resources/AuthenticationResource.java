@@ -4,11 +4,13 @@ import jerik.the.dog.springsecurityjwt.dto.AuthenticationRequest;
 import jerik.the.dog.springsecurityjwt.dto.AuthenticationResponse;
 import jerik.the.dog.springsecurityjwt.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +30,11 @@ public class AuthenticationResource {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
+    }
+
+    @GetMapping(value = "/hello")
+    public ResponseEntity<String> hello() {
+        return new ResponseEntity<>("Well hello there my friend!", HttpStatus.I_AM_A_TEAPOT);
     }
 
     // we must open this endpoint for non-authenticated users (so that they can authenticate)

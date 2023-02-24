@@ -39,7 +39,7 @@ public class JwtUtil {
     // e.g. username (subject) and expiration
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 
@@ -67,6 +67,12 @@ public class JwtUtil {
                 .setExpiration(Date.from(creationTime.plusHours(1).toInstant(ZoneOffset.UTC)))
                 .signWith(SECRET_KEY) // actual signing of the jwt
                 .compact(); // build and serialize to compact representation
+        // note - no password is stored, just the claims (username (subject) is an implicit claim here)
+        // and everything is signed by our private key
+        // this "composition of claims" could have been created only by us, during the authentication process
+        // there's no way this could have been forged (unless our key is compromised)
+        // so when we get this back and verify the signature, we can trust it - and use it e.g. for authentication
+        // (and much more - e.g. setting up the session - as we have all the claims we can trust)
     }
 
     // validates the token
